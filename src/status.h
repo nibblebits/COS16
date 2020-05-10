@@ -1,0 +1,9 @@
+#ifndef STATUS_H
+#define STATUS_H
+
+#define COS16_ALL_OK 0
+#define COS16_FS_IO_ERROR 1
+#define COS16_FS_FILE_NOT_FOUND_ERROR 2
+#define COS16_FS_FILE_READ_ONLY_ERROR 3
+
+#endif
