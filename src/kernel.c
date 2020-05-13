@@ -21,7 +21,6 @@ void main()
             }
         }
 
-        kfree(0x3000);
         ptr = kmalloc(512);
         if (ptr == 0)
         {
@@ -31,7 +30,6 @@ void main()
 
     fs_load();
 
-    print("fuck you");
     {
         int f = fopen("./START", 'w');
         if (f < 0)
