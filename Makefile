@@ -3,7 +3,7 @@ CC=bcc
 LD=ld86
 INC=./src
 SRC=./src
-OBJECTS= ./build/kernel.o ./build/display.o ./build/displayasm.o ./build/memory/memory.o ./build/string/string.o  ./build/fs/file.o ./build/fs/fat/fat16.o
+OBJECTS= ./build/kernel.o ./build/display.o ./build/displayasm.o ./build/memory/memory.o ./build/memory/heap.o ./build/memory/kheap.o ./build/string/string.o  ./build/fs/file.o ./build/fs/fat/fat16.o
 INC=./src
 CFLAGS=-0 -I$(INC) -ansi -c 
 
@@ -27,6 +27,12 @@ all: ./bin/boot.bin ./bin/kernel.bin
 
 ./build/memory/memory.o: ./src/memory/memory.c ./src/memory/memory.h
 	$(CC) $(CFLAGS) -I./src/memory $(SRC)/memory/memory.c -o ./build/memory/memory.o
+
+./build/memory/heap.o: ./src/memory/heap.c ./src/memory/heap.h
+	$(CC) $(CFLAGS) -I./src/heap $(SRC)/memory/heap.c -o ./build/memory/heap.o
+
+./build/memory/kheap.o: ./src/memory/kheap.c ./src/memory/kheap.h
+	$(CC) $(CFLAGS) -I./src/kheap $(SRC)/memory/kheap.c -o ./build/memory/kheap.o
 
 ./build/string/string.o: ./src/string/string.c ./src/string/string.h
 	$(CC) $(CFLAGS) -I./src/string $(SRC)/string/string.c -o ./build/string/string.o

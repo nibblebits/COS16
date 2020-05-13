@@ -8,7 +8,7 @@ nop
 OEMIdentifier   db 'COS16   '
 BytesPerSector 		dw 0x200	; 512 bytes per sector
 SectorsPerCluster	db 0x80		;
-ReservedSectors 	dw 0x02		; Reserved sectors before FAT (TODO: is this BOOT?)
+ReservedSectors 	dw 10		; Reserved sectors before FAT (TODO: is this BOOT?)
 FATCopies		db 0x02		  ; Often this value is 2.
 RootDirEntries 		dw 0x0800	; Root directory entries
 NumSectors		dw 0x0000	;  If this value is 0, it means there are more than 65535 sectors in the volume
@@ -39,6 +39,21 @@ int 0x13
 ; Segment where kernel will load
 mov ax, 0x7e0
 mov es, ax
+
+safety_check:
+    push dx
+    mov ah, 8
+    int 0x13
+    pop dx
+
+    and cl, 0x3f
+    cmp cl, 10
+    jb .problem
+    jmp kernel_load
+.problem:
+    mov si, sector_problem
+    call print
+    jmp $
 
 ; LOAD KERNEL INTO MEMORY
 kernel_load:
@@ -76,6 +91,7 @@ print:
 
 
 problem_loading_kernel: db 'Issue loading the kernel ensure medium is large enough and contains valid kernel', 0
+sector_problem: db 'Cannot load given sector amount', 0
 
 TIMES 510-($-$$) db 0
 dw 0xAA55
