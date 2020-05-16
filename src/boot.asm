@@ -40,25 +40,10 @@ int 0x13
 mov ax, 0x7e0
 mov es, ax
 
-safety_check:
-    push dx
-    mov ah, 8
-    int 0x13
-    pop dx
-
-    and cl, 0x3f
-    cmp cl, 10
-    jb .problem
-    jmp kernel_load
-.problem:
-    mov si, sector_problem
-    call print
-    jmp $
-
 ; LOAD KERNEL INTO MEMORY
 kernel_load:
     mov ah, 0x02
-    mov al, 10
+    mov al, 15
     mov ch, 0
     mov cl, 2
     mov dh, 0

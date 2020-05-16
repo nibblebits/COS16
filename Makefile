@@ -3,7 +3,7 @@ CC=bcc
 LD=ld86
 INC=./src
 SRC=./src
-OBJECTS= ./build/kernel.o ./build/display.o ./build/displayasm.o ./build/memory/memory.o ./build/memory/heap.o ./build/memory/kheap.o ./build/string/string.o  ./build/fs/file.o ./build/fs/fat/fat16.o
+OBJECTS= ./build/kernel.o ./build/disk/disk.o ./build/disk/diskasm.o ./build/display.o ./build/displayasm.o ./build/memory/memory.o ./build/memory/heap.o ./build/memory/kheap.o ./build/string/string.o  ./build/fs/file.o ./build/fs/fat/fat16.o
 INC=./src
 CFLAGS=-0 -I$(INC) -ansi -c 
 
@@ -18,6 +18,12 @@ all: ./bin/boot.bin ./bin/kernel.bin
 
 ./build/kernel.o: ./src/kernel.c ./src/kernel.h
 	$(CC) $(CFLAGS) $(SRC)/kernel.c -o ./build/kernel.o
+
+./build/disk/disk.o: ./src/disk/disk.c ./src/disk/disk.h
+	$(CC) $(CFLAGS) -I./src/disk $(SRC)/disk/disk.c -o ./build/disk/disk.o
+
+./build/disk/diskasm.o: ./src/disk/disk.asm
+	nasm -f as86 ./src/disk/disk.asm -o ./build/disk/diskasm.o
 
 ./build/display.o: ./src/display.c ./src/display.h
 	$(CC) $(CFLAGS) $(SRC)/display.c -o ./build/display.o
@@ -41,7 +47,7 @@ all: ./bin/boot.bin ./bin/kernel.bin
 	$(CC) $(CFLAGS) -I./src/fs $(SRC)/fs/file.c -o ./build/fs/file.o
 
 ./build/fs/fat/fat16.o: ./src/fs/fat/fat16.c ./src/fs/fat/fat16.h
-	$(CC) $(CFLAGS) -I./fs/fat $(SRC)/fs/fat/fat16.c -o ./build/fs/fat/fat16.o
+	$(CC) $(CFLAGS) -I./src/fs/fat $(SRC)/fs/fat/fat16.c -o ./build/fs/fat/fat16.o
 
 ./bin/kernel.bin: ${OBJECTS} 
 	$(LD) -d -M ${OBJECTS} -L/usr/lib/bcc/ -lc -o ./bin/kernel.bin

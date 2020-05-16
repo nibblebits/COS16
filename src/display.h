@@ -2,5 +2,6 @@
 #define DISPLAY_H
 
 extern void putchar(char c);
-void print(const char* message);
+void print(char* message);
+void print_number(int number);
 #endif
